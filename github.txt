@@ -1,4 +1,4 @@
-#Create a new repository on github and upload local files to it
+## Create a new repository on github and upload local files to it
 cd <a local path>
 git clone <repository SSH>
 eg:git clone git@github.com:weiweia92/Learning-Note.git
