@@ -1,0 +1,9 @@
+#delete files/directory on github 
+git rm -r <file_name/directory_name>
+git commit -m '<annotation>'
+git push
+
+#add the local files/directory to github
+git add <file_name/directory_name>
+git commit -m '<annotation>'
+git push -f
