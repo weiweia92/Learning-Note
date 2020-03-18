@@ -1,4 +1,4 @@
-## Create a new repository on github and upload local files to it
+### Create a new repository on github and upload local files to it
 cd <a local path>
 git clone <repository SSH>
 eg:git clone git@github.com:weiweia92/Learning-Note.git
@@ -9,12 +9,12 @@ eg:ls
    git commit -m '<annotation>'
    git push
 
-#delete files/directory on github 
+### delete files/directory on github 
 git rm -r <file_name/directory_name>
 git commit -m '<annotation>'
 git push
 
-#add the local files/directory to github
+### add the local files/directory to github
 git add <file_name/directory_name>
 git commit -m '<annotation>'
 git push -f
