@@ -40,6 +40,23 @@ To change a user primary group, use the usermod command followed by the -g optio
 ### display the user's supplementary groups  
 `groups liuwei`  
 
+## shell
+
+`touch {1,2}.py`  
+
+### find 
+find a diretory named src in the current path  
+
+`find . -name src -type d`  
+
+find a file which path is '\*\*/test/\*.py'  
+
+`find . -path '**/test/*.py' -type f`  
+
+find all files and execute 'rm...'  
+
+`find . -name "*.tmp" -exec rm {} \`  
+
 
 
 
