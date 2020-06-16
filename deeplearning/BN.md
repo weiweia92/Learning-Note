@@ -24,5 +24,9 @@ ICS产生的原因是由于参数更新带来的网络中每一层输入值分�
 另一个问题，既然白化操作减弱了网络中每一层输入数据表达能力，那我就再加个线性变换操作，让这些数据再能够尽可能恢复本身的表达能力就好了。`Batch Normalization`被提出.  
 
 在深度学习中，由于采用full batch的训练方式对内存要求较大，且每一轮训练时间过长；我们一般都会采用对数据做划分，用mini-batch对网络进行训练。因此，Batch Normalization也就在mini-batch的基础上进行计算  
-![](https://github.com/weiweia92/pictures/blob/master/Screenshot%20from%202020-06-16%2015-54-00.png)
-Batch Normalization引入了两个learnable parameters(gamma,beta)   
+![](https://github.com/weiweia92/pictures/blob/master/Screenshot%20from%202020-06-16%2015-54-00.png)  
+Batch Normalization引入了两个learnable parameters(gamma,beta)  
+
+### 测试阶段如何使用Batch Normalization  
+![](https://github.com/weiweia92/pictures/blob/master/Screenshot%20from%202020-06-16%2016-22-49.png)  
+
