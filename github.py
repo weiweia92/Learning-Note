@@ -99,3 +99,16 @@ git show <09bb8e3f996eaf9a68ac...>
 
 #Used to give tags to the specified commit
 git tag <09bb8e3f996eaf9a68ac...>
+
+#Problem
+Git Error - key does not contain a section
+解决:
+emacs /.git/config
+make core look like:
+[core]
+repositoryformatversion = 0
+filemode = true
+bare = false
+logallrefupdates = true
+ignorecase = true
+precomposeunicode = true
