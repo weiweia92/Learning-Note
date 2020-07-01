@@ -1,11 +1,24 @@
 ## Docker  
 
+Docker Images  
+1.Read Only Template Used To Create Containers  
+2.Build By Docker User  
+3.Stored In Docker Hub Or Your Local Registry  
+Docker Container  
+Docker Images --> run to generate Docker Containers  
+1.Isolated Application Platform  
+2.Contains Everything Needed To Run The Application  
+3.Built From One Or More Images  
+
 ## Docker教程  
 
 ### docker安装  
 `sudo apt-get install docker.io`  
 ![](https://github.com/weiweia92/pictures/blob/master/Screenshot%20from%202020-07-01%2009-42-41.png)  
 安装成功  
+We need to start the docker service after install.  
+`sudo service docker start`  
+
 ### docker终端的一些命令  
 
 - `docker info`:查看docker信息  
@@ -52,58 +65,38 @@
 `mkdir docker-sample && cd docker-sample`  
 `touch Dockerfile`
   
-### Dockerfile语法  
+### Dockerfile Syntax  
+Dockerfile syntax consists of two kind of main line blocks:comments and commands+arguments  
 
 **FROM**   
-Dockerfile第一条必须为FROM指令，选择parent image for docker,为了安全尽量使用官方的base image，如果同一个Dockerfile创建多个镜像时，可使用多个FROM指令：  
-`FORM scratch`&emsp;&emsp;&emsp;#制作base image    
-`FORM centos`&emsp;&emsp;&emsp;#使用base image    
-`FORM centos`：14.04 &emsp;&emsp;&emsp;#使用带版本的base image  
-  
-**LABEL**  
-LABEL用于定义Metadata，包括作者信息，版本信息，描述信息  
-`LABEL maintainer="starlihang@qq.com"`     
-`LABEL version="1.0"`  
-`LABEL description="hello docker"`  
+From directive is probably the most crucial amongst all others for Dockerfiles.It defines the base image to use to start the build process.  
+`FROM [base image name]`  
+`FROM ubuntu:18.04`  
 
 **RUN**   
+RUN command is the central executing directive for Dockerfiles.It takes a command as its argument and runs it to form the image.Unlike CMD,it actually is used to build the image.  
+`RUN [command]`  
+`RUN apt-get install -y riak`  
+It has a slight difference from CMD.RUN is used to run a command,which could be a shell command or basically runs my image into a container.But CMD,it can execute a shell command like `CMD "echo""Welcome to Edureka"`,but however it can not use CMD to build my docker image.  
 
-**WORKDIR**  
-设定当前的工作目录,尽量使用WORKDIR切换工作目录，避免使用RUN cd！尽量使用绝对目录  
-`WORKDIR /test`&emsp;&emsp;&emsp;#切换到test目录，如果没有会自动创建test目录  
-`WORKDIR hello`    
+**ENTRYPOINT**  
 
-**RUN**  
-RUN instruction runs commands,just like you do on the terminal,but in the Docker image.  
-下面的命令用来安装Python, pip和app dependencies,dependencies写在rerequirements.txt文件里.  
-
-`RUN apk add --update python py-pip`  
-`RUN pip install --upgrade pip`  
-`RUN pip install -r requirements.txt`    
-
-**ADD and COPY**  
-添加/复制文件到指定目录。优先使用COPY，ADD还有解压，添加远程文件或目录使用curl或者wget的作用    
-`ADD hello /`&emsp;&emsp;&emsp;# 添加hello到根目录  
-`ADD test.tar.gz /`&emsp;&emsp;&emsp;# 添加到根目录并解压(COPY不会解压）  
-`WORKDIR /root` &emsp;&emsp;&emsp;# 切换到root目录  
-`ADD hello test/` &emsp;&emsp;&emsp;# /root/test/hello  
-为什么要使用COPY而不是ADD？你会发现从URL复制文件是一项可以使用RUN命令通过Curl运行的任务。您也可以使用RUN命令在Docker映像中提取文件。  
-`COPY hello test`    
-
-**WORKDIR**  
-WORKDIR允许你在Docker建立image时更改目录，the new directory remains the current directory for the rest of the build instructions.
-
-**MAINTAINER**  
-MAINTAINER <name>  
-指令允许您设置生成的images的作者字段  
+**ADD**  
+ADD command gets two arguments:a source and a destination.It basically copies the files from the source on the host into the container's own filesystem at the set destination.  
+`ADD [source directory or URL] [destination directory]`  
+`ADD /my_app_folder /my_app_folder`  
 
 **ENV**  
-设置常量，多使用常量增加可维护性  
+The ENV command is used to set the environment variables(one or more).These variables consist of "key value"pairs which can be accessed within the container by scripts and applications alike.  
+`ENV SERVER_WORKS 4`  
+
 `ENV applocation /usr/src `  
 `COPY flask-helloworld $applocation/flask-helloworld`  
 `ENV flaskapp $applocation/flask-helloworld`  
-WORKDIR instruction changes the current directory in Docker image.The command below changes directory to /usr/src/flask-helloworld.The target directory uses the environment variable.  
-`WORKDIR $flaskapp/`  
+
+**WORKDIR**  
+WORKDIR directive is used to set where the command defined with CMD is to be executed. WORKDIR允许你在Docker建立image时更改目录，the new directory remains the current directory for the rest of the build instructions.
+`WORKDIR /path`
 
 **CMD and ENTRYPOINT**  
 CMD  
@@ -115,12 +108,23 @@ ENTRYPOINT：
     * 让容器以应用程序或者服务的形式运行（后台进程）  
     * 不会被忽略，一定会执行  
     * 常见使用方式：写一个脚本作为ENTRYPOINT去执行  
-PS：RUN是执行命令并创建新的image layer  
 
-**VOLUME and EXPOSE**  
-存储和网络设置，VOLUME创建一个可以从本地主机或其他容器挂载的挂载点，一般用来存放数据库和需要保持的数据。EXPOSE 告诉Docker服务端容器暴露的端口号，供互联系统使用。在启动Docker时，可以通过-P,主机会自动分配一个端口号转发到指定的端口，如：
+**EXPOSE**  
+EXPOSE command is used to associate a specified port to enable networking between the running process inside the container and the outside world.  
+`EXPOSE 8080`  
 
+EXPOSE告诉Docker服务端容器暴露的端口号，供互联系统使用。在启动Docker时，可以通过-P,主机会自动分配一个端口号转发到指定的端口，如：
 `docker run -d -p 127.0.0.1:23333:22 centos6-ssh`:容器ssh服务的22端口将被映射到宿主机的23333端口  
+
+**MAINTAINER**  
+THis non-executing command declares the author,hence setting the author field of the images.It should come nonetheless(尽管如此) after FROM.  
+`MAINTAINER [name]`  
+`MAINTAINER authors_name`  
+
+**USER**  
+The USER directive is used to set the UID(or username)which is to run the container based on the image being built.  
+`USER [UID]`  
+`USER 751`  
 
 ### 根据Dockerfile创建docker image  
 建立完一个sample_image/Dockerfile后，创建docker image  
