@@ -8,31 +8,31 @@
 安装成功  
 ### docker终端的一些命令  
 
-`docker info`:查看docker信息  
+- `docker info`:查看docker信息  
 此时的docker是一个‘裸’docker，没有container也没有image，image简单理解就是container的只读版，用来方便存储与交流  
 我们可以通过官方提供给我们的镜像来进行学习。比如我们想在Docker中运行一个Ubuntu系统，很简单，Docker中得pull命令是用来获取镜像的，执行下面的命令，就会从官方仓库里获取Ubuntu 18.04版本的系统:  
-`docker pull ubuntu:18.04`  
+- `docker pull ubuntu:18.04`  
 ![](https://github.com/weiweia92/pictures/blob/master/Screenshot%20from%202020-07-01%2009-43-02.png)
 `-it`:表示交互  
 仔细看，你会发现终端交互的用户名变掉了，说明我们进入到了容器的内部,执行`exit`退出此终端，回到系统本身的终端  
 ![](https://github.com/weiweia92/pictures/blob/master/Screenshot%20from%202020-07-01%2009-43-23.png)
-`docker ps`:查看当前运行了哪些容器  
-`docker ps -a`:表示运行过哪些容器  
-`sudo docker commit -m "Added ubuntu18.04" -a "weiweia92" 79c761f627f3 weiweia92/ubuntu:v1`  
+- `docker ps`:查看当前运行了哪些容器  
+- `docker ps -a`:表示运行过哪些容器  
+- `sudo docker commit -m "Added ubuntu18.04" -a "weiweia92" 79c761f627f3 weiweia92/ubuntu:v1`  
 
 `commit`命令用来将容器转化为镜像  
 `m`用来来指定提交的说明信息;`-a`可以指定用户信息的;`79c761f627f3`代表容器的`id`;`weiweia92/ubuntu:v1`指定目标镜像的用户名、仓库名和 `tag` 信息  
 ![](https://github.com/weiweia92/pictures/blob/master/Screenshot%20from%202020-07-01%2009-44-00.png)
 
-`docker images`:查看拥有的镜像  
+- `docker images`:查看拥有的镜像  
 ![](https://github.com/weiweia92/pictures/blob/master/Screenshot%20from%202020-07-01%2009-44-12.png)  
 里面有一个`test`镜像`tag`为`0.1`  
-`docker run -it test:0.1`:进入名为`test`的镜像  
-`docker rmi -f <IMAGE ID>`:删除本地docker image  
-`docker build . -t <REPOSITORY>:<TAG>`:建立docker image  
-`docker search 关键字`  
-`eg：docker search redis`,检索镜像(一般从docker hub检索)  
-`docker images | grep none | awk '{print $3} ' | xargs docker rmi`:删除所有名称为none的镜像  
+- `docker run -it test:0.1`:进入名为`test`的镜像  
+- `docker rmi -f <IMAGE ID>`:删除本地docker image  
+- `docker build . -t <REPOSITORY>:<TAG>`:建立docker image  
+- `docker search 关键字`  
+- `eg：docker search redis`,检索镜像(一般从docker hub检索)  
+- `docker images | grep none | awk '{print $3} ' | xargs docker rmi`:删除所有名称为none的镜像  
 
 ### 如何将建立好的镜像上传到dockerhub上  
 首先打开Dockerhub登录自己的账号,建立一个新的仓库，仓库的名字要和待上传的镜像名字一致,实例中叫test  
