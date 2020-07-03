@@ -1,9 +1,12 @@
 ## Copying files and directories
 
 copy a file named file.txt to file named file2.txt in the current directory.If the destination file exists, it will be overwritten.   
+
 `cp file.txt file2.txt`   
+
 `-i:interactive`  
 `-p:preserve the file mode`  
+
 `eg: cp -i file.txt file_backup.txt`  
 
 `uname -a :system info--all`  
@@ -22,23 +25,42 @@ Secondary or supplementary group - Useful when you want to grant certain file pe
 Only root or users with sudo access can add a user to a group  
 
 ### add an existing user to group/multi_group  
+
 `sudo username -a -G groupname username`  
+
 `sudo username -a oG groupname1 groupname2 username`  
+
 ### remove a user from a group  
+
 `sudo gpasswd -d username groupname`  
+
 ### create a group  
+
 `sudo groupadd groupname`  
+
 ### delete a group  
+
 `sudo groupdel groupname`  
+
 ### change a user's primary group  
+
 To change a user primary group, use the usermod command followed by the -g option.In the following example, we are changing the primary group of the user linuxize to developers:  
+
 `sudo usermod -g developers  username`  
+
 ### create a new user and assign groups in one command  
+
 `sudo useradd -g users -G wheel,developers nathan`  
+
 ### display user groups  
+
 `id username`  
+
 ### display the user's supplementary groups  
+
 `groups liuwei`  
+
+### sudo -i  
 
 ## shell
 

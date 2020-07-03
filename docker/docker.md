@@ -30,6 +30,14 @@ Docker Images --> run to generate Docker Containers
 
 ## Docker Commands  
 
+How to add docker to sudo:  
+
+`sudo groupadd docker`  
+
+`sudo gpasswd -a weiweia92 docker`  
+
+`newgrp docker`  
+
 - `sudo apt-get install docker.io`:install docker  
 
 ![](https://github.com/weiweia92/pictures/blob/master/Screenshot%20from%202020-07-01%2009-42-41.png)  
