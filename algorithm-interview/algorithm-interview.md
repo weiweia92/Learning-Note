@@ -56,11 +56,15 @@ ROC越靠左上角效果越好，AUC为横纵坐标围成的面积，越大越�
 过拟合主要两个原因造成，数据太少和模型太复杂  
 解决过拟合方法:  
 `early stopping`  
+
 **`l1 regularization`**  
+
 参数的稀疏，在一定程度实现了特征的选择.  
-![](https://github.com/weiweia92/pictures/blob/master/deeplearning/Screenshot%20from%202020-07-13%2019-30-59.png)
+![](https://github.com/weiweia92/pictures/blob/master/deeplearning/Screenshot%20from%202020-07-13%2019-30-59.png)  
+
 **`l2 regularization`**  
-![](https://github.com/weiweia92/pictures/blob/master/deeplearning/Screenshot%20from%202020-07-13%2019-31-06.png)
+![](https://github.com/weiweia92/pictures/blob/master/deeplearning/Screenshot%20from%202020-07-13%2019-31-06.png)  
+
 `dropout`:通过修改隐藏层神经元的个数来防止网络的过拟合，也就是通过修改深度网络本身。在每一批次数据被训练时，Dropout按照给定的概率P随机剔除一些神经元，只有没有被剔除神经元的参数被更新。**每一批次数据，由于随机性剔除神经元，使得网络具有一定的稀疏性，从而能减轻了不同特征之间的协同效应。而且由于每次被剔除的神经元不同，所以整个网络神经元的参数也只是部分被更新，消除减弱了神经元间的联合适应性，增强了神经网络的泛化能力和鲁棒性。Dropout只在训练时使用，作为一个超参数，然而在测试集时，并不能使用**
 
 
