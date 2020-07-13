@@ -4,52 +4,52 @@
 
 #### 模型评估方法
 
-**Accuracy作为指标有哪些局限性？**
+- **Accuracy作为指标有哪些局限性？**
 
 当正负样本极度不均衡时存在问题！比如，正样本有99%时，分类器只要将所有样本划分为正样本就可以达到99%的准确率。但显然这个分类器是存在问题的。当正负样本不均衡时，常用的评价指标为ROC曲线和PR曲线。
 
-**ROC曲线和PR曲线各是什么？**
+- **ROC曲线和PR曲线各是什么？**
 
-ROC:由FPR(False positive rate)和TPR(True positive rate)为横纵坐标的曲线  
+`ROC`:由`FPR(False positive rate)和TPR(True positive rate)`为横纵坐标的曲线  
 
-FPR:FP/(FP+TN)误分为正样本的负样本占所有实际负样本的比例  
-TPR:TP/(TP+FN)正确分类的正样本占所有实际正样本的比例  
+`FPR:FP/(FP+TN)`误分为正样本的负样本占所有实际负样本的比例  
+`TPR:TP/(TP+FN)`正确分类的正样本占所有实际正样本的比例  
 
-True Positive, TP: 正确的正样本(预测为正样本，实际也为正样本)  
-False Positive, FP:错误的正样本(预测为正样本，实际为负样本)  
-True Negative, TN: 正确的负样本(预测为负样本，实际也为负样本)  
-False Negative, FN: 错误的负样本(预测为负样本，实际为正样本)  
+`True Positive, TP`: 正确的正样本(预测为正样本，实际也为正样本)  
+`False Positive, FP`:错误的正样本(预测为正样本，实际为负样本)  
+`True Negative, TN`: 正确的负样本(预测为负样本，实际也为负样本)  
+`False Negative, FN`: 错误的负样本(预测为负样本，实际为正样本)  
 
-PR:Precision-Recall曲线，x:Recall，y:Precision  
+`PR:Precision-Recall`曲线，`x:Recall，y:Precision`  
 
-Precision=TP/(TP+FP), 正确的正样本占所有预测正样本的比例  
-Recall=TP/(TP+FN)， 正确的正样本占所有实际正样本的比例  
+`Precision=TP/(TP+FP)`, 正确的正样本占所有预测正样本的比例  
+`Recall=TP/(TP+FN)`， 正确的正样本占所有实际正样本的比例  
 
 ROC越靠左上角效果越好，AUC为横纵坐标围成的面积，越大越好.  
 
-**F1 Score**
+- **F1 Score**
 
-F1=2\*precision\*recall/(precision+recall)  
+`F1=2\*precision\*recall/(precision+recall)  `
 
-**编程实现AUC的计算，并指出复杂度？**
+- **编程实现AUC的计算，并指出复杂度？**
 
-**AUC指标有什么特点？放缩结果对AUC是否有影响？**
+- **AUC指标有什么特点？放缩结果对AUC是否有影响？**
 
-**余弦距离与欧式距离有什么特点？**
+- **余弦距离与欧式距离有什么特点？**
 
 ### 基本方法
 
 - 什么是偏差和方差？
 
-**什么是过拟合？深度学习解决过拟合的方法有哪**
+- **什么是过拟合？深度学习解决过拟合的方法有哪**
 
 过拟合表现在训练好的模型在训练集上效果很好，但是在测试集上效果差。也就是说模型的泛化能力弱.  
 过拟合主要两个原因造成，数据太少和模型太复杂  
 解决过拟合方法:  
-early stopping  
-l1 regularization:
-l2 regularization:
-dropout:通过修改隐藏层神经元的个数来防止网络的过拟合，也就是通过修改深度网络本身。在每一批次数据被训练时，Dropout按照给定的概率P随机剔除一些神经元，只有没有被剔除神经元的参数被更新。**每一批次数据，由于随机性剔除神经元，使得网络具有一定的稀疏性，从而能减轻了不同特征之间的协同效应。而且由于每次被剔除的神经元不同，所以整个网络神经元的参数也只是部分被更新，消除减弱了神经元间的联合适应性，增强了神经网络的泛化能力和鲁棒性。Dropout只在训练时使用，作为一个超参数，然而在测试集时，并不能使用**
+`early stopping`  
+`l1 regularization`:
+`l2 regularization`:
+`dropout`:通过修改隐藏层神经元的个数来防止网络的过拟合，也就是通过修改深度网络本身。在每一批次数据被训练时，Dropout按照给定的概率P随机剔除一些神经元，只有没有被剔除神经元的参数被更新。**每一批次数据，由于随机性剔除神经元，使得网络具有一定的稀疏性，从而能减轻了不同特征之间的协同效应。而且由于每次被剔除的神经元不同，所以整个网络神经元的参数也只是部分被更新，消除减弱了神经元间的联合适应性，增强了神经网络的泛化能力和鲁棒性。Dropout只在训练时使用，作为一个超参数，然而在测试集时，并不能使用**
 
 
 **解决欠拟合的方法有哪些？**  
@@ -62,7 +62,7 @@ dropout:通过修改隐藏层神经元的个数来防止网络的过拟合，也
 
 **简述了解的优化器，发展综述？**
 
-BGD,SGD,动量优化法:Monentum,NAG(Nesterov accelerated gradient),自适应学习率优化法:Adagrad,RMSprop,AdaDelta,Adam
+`BGD,SGD`,动量优化法:`Monentum,NAG(Nesterov accelerated gradient)`,自适应学习率优化法:`Adagrad,RMSprop,AdaDelta,Adam`
 
 
 **常用的损失函数有哪些？分别适用于什么场景？**
@@ -87,10 +87,10 @@ MSE
 
 **常用的激活函数，导数？**
 
-sigmoid,tanh,relu,leaky relu,swish,mish
-$sigmoid=\frac{1}{1+e^{-x}}$  
-$tanh=\frac{e^x-e^{-x}}{e^x+e^{-x}}$  
-$swish=$
+`sigmoid,tanh,relu,leaky relu,swish,mish`
+$ sigmoid=\frac{1}{1+e^{-x}} $  
+$ tanh=\frac{e^x-e^{-x}}{e^x+e^{-x}} $  
+$ swish=$
 sigmoid,tanh为什么会导致梯度消失? 略  
 
 - relu的有优点？又有什么局限性？他们的系列改进方法是啥？
