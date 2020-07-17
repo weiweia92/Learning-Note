@@ -169,10 +169,6 @@ DropConnect:只在连接处随意扔，神经元不扔
 对于以上方法，作者又进行了额外更改:  
 **输入端的创新:**    
 1.data augument:Mosaic,SAT(自我对抗训练)  
-Mosaic优点:  
-a. 丰富数据库：随机使用4张图片，随机缩放，再随机分布进行拼接，大大丰富了检测数据集，特别是随机缩放增加了很多小目标，让网络的鲁棒性更好  
-b. 减少GPU：可能会有人说，随机缩放，普通的数据增强也可以做，但作者考虑到很多人可能只有一个GPU。  
-因此Mosaic增强训练时，可以直接计算4张图片的数据，使得Mini-batch大小并不需要很大，一个GPU就可以达到比较好的效果  
 
 2.Class label smoothing(标签平滑):通常，将bbox的正确分类表示为类别[0,0,0,1,0,0，...]的独热编码，并基于该表示来计算损失函数。但是，当模型对预测值接近1.0,变得过分确定时，通常是错误的，overfit，并且以某种方式忽略了其他预测值的复杂性。按照这种直觉，在某种程度上重视这种不确定性对类标签进行编码是更合理的。当然，作者选择0.9，因此[0,0,0,0.9，0 ....]代表正确的类
 
@@ -189,12 +185,33 @@ CmBN:
 ## yolov4框架  
 CSPDarknet53借鉴CSPNet,CSPNet全称是Cross Stage Paritial Network，主要从网络结构设计的角度解决推理中从计算量很大的问题。CSPNet的作者认为推理计算过高的问题是由于网络优化中的梯度信息重复导致的  
 ![](https://github.com/weiweia92/pictures/blob/master/Screenshot%20from%202020-06-05%2014-50-54.png)  
+
 yolov4创新点:   
-（1）输入端：这里指的创新主要是训练时对输入端的改进，主要包括**Mosaic数据增强、cmBN、SAT自对抗训练**.  
+
+### 输入端创新
+
+这里指的创新主要是训练时对输入端的改进，主要包括**Mosaic数据增强、cmBN、SAT自对抗训练**.  
+
+Mosiac:  
+
+a. 丰富数据库：随机使用4张图片，随机缩放，再随机分布进行拼接，大大丰富了检测数据集，特别是随机缩放增加了很多小目标，让网络的鲁棒性更好  
+b. 减少GPU：可能会有人说，随机缩放，普通的数据增强也可以做，但作者考虑到很多人可能只有一个GPU。  
+因此Mosaic增强训练时，可以直接计算4张图片的数据，使得Mini-batch大小并不需要很大，一个GPU就可以达到比较好的效果  
+
+CmBN:  
+
+SAT自对抗训练:  
+
+自对抗训练也是一种新的数据增强方法，可以一定程度上抵抗对抗攻击。其包括两个阶段，每个阶段进行一次前向传播和一次反向传播。  
+第一阶段，CNN通过反向传播改变图片信息，而不是改变网络权值。通过这种方式，CNN可以进行对抗性攻击，改变原始图像，造成图像上没有目标的假象。  
+第二阶段，对修改后的图像进行正常的目标检测。  
+
 （2）BackBone主干网络：将各种新的方式结合起来，包括：**CSPDarknet53、Mish激活函数、Dropblock**  
 （3）Neck：目标检测网络在BackBone和最后的输出层之间往往会插入一些层，比如Yolov4中的SPP模块、FPN+PAN结构  
 （4）Prediction：输出层的锚框机制和Yolov3相同，主要改进的是训练时的损失函数CIOU_Loss，以及预测框筛选的nms变为DIOU_nms  
+
 ### backbone主干网络创新   
+
 **CSPDarknet网络结构**    
 优点:  
 增加CNN学习能力，使得在轻量化的同时保持准确性,降低计算瓶颈,降低内存成本  
@@ -204,18 +221,41 @@ yolov4创新点:
 而且作者只在Backbone中采用了Mish激活函数，网络后面仍然采用Leaky_relu激活函数。  
 backbone卷积层个数:  
 每个CSPX中包含3+2×X个卷积层，因此整个主干网络Backbone中一共包含2+（3+2×1）+2+（3+2×2）+2+（3+2×8）+2+（3+2×8）+2+（3+2×4）+1=72  
+
 **DropBlock**  
+Dropout的方式会随机的删减丢弃一些信息，但Dropblock的研究者认为，卷积层对于这种随机丢弃并不敏感，因为卷积层通常是三层连用：卷积+激活+池化层，池化层本身就是对相邻单元起作用。而且即使随机丢弃，卷积层仍然可以从相邻的激活单元学习到相同的信息。因此，在全连接层上效果很好的Dropout在卷积层上效果并不好。所以Dropblock的研究者则干脆整个局部区域进行删减丢弃。
+
+这种方式其实是借鉴2017年的cutout数据增强的方式，cutout是将输入图像的部分区域清零，而Dropblock则是将Cutout应用到每一个特征图。而且并不是用固定的归零比率，而是在训练时以一个小的比率开始，随着训练过程线性的增加这个比率。  
+Dropblock的研究者与Cutout进行对比验证时，发现有几个特点：  
+
+优点一：Dropblock的效果优于Cutout  
+优点二：Cutout只能作用于输入层，而Dropblock则是将Cutout应用到网络中的每一个特征图上  
+优点三：Dropblock可以定制各种组合，在训练的不同阶段可以修改删减的概率，从空间层面和时间层面，和Cutout相比都有更精细的改进。  
+
+Yolov4中直接采用了更优的Dropblock，对网络的正则化过程进行了全面的升级改进  
+
 **Mish**  
 
 ### Neck创新  
 **SPP模块**  
-采用1×1，5×5，9×9，13×13的最大池化的方式，进行多尺度融合。   
+采用1×1，5×5，9×9，13×13的最大池化的方式，进行多尺度融合concat操作。   
 ![](https://github.com/weiweia92/pictures/blob/master/Screenshot%20from%202020-06-05%2014-51-09.png)   
 **FPN+PAN**  
 ![](https://github.com/weiweia92/pictures/blob/master/Screenshot%20from%202020-06-05%2014-51-15.png)  
-
-原本的PANet网络的PAN结构中，两个特征图结合是采用shortcut操作，而Yolov4中则采用concat（route）操作，特征图融合后的尺寸发生了变化  
+**modified PANet**  
+PANet融合的时候使用的方法是Addition,yolov4将加法改为了concatenate  
 ![](https://github.com/weiweia92/pictures/blob/master/Screenshot%20from%202020-06-05%2014-51-22.png)  
+
+### prediction  
+
+输出层的锚框机制和Yolov3相同，主要改进的是训练时的损失函数CIOU_Loss，以及预测框筛选的nms变为DIOU_nms  
+IOU_Loss：主要考虑检测框和目标框重叠面积  
+
+GIOU_Loss：在IOU的基础上，解决边界框不重合时的问题。  
+
+DIOU_Loss：在IOU和GIOU的基础上，考虑边界框中心点距离的信息。  
+
+CIOU_Loss：在DIOU的基础上，考虑边界框宽高比的尺度信息  
 
 不过这里需要注意几点：
 注意一：
