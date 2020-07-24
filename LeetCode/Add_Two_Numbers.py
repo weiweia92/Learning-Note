@@ -15,26 +15,6 @@
 
 
 class Solution(object):
-    def addSum(l1, l2):
-        carry = 0
-        newList = Node(0)
-        tmp = newList
-        totalSum = 0
-
-        while l1 or l2:
-            if l1:
-                totalSum += l1.val
-                l1 = l1.next
-            if l2:
-                totalSum += l2.val
-                l2 = l2.next
-                totalSum += carry
-                tmp.next = Node(totalSum % 10)
-                carry = totalSum/10
-                tmp = tmp.next
-
-
-        return newList.next
 
     def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
         ## RC ##
