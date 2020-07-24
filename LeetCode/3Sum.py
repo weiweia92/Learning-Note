@@ -53,4 +53,5 @@ class Solution(object):
                 else:
                     r -= 1
                     
-            return result
+        return result
+
