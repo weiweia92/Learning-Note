@@ -1,7 +1,6 @@
 from builtins import range
 import numpy as np
 from random import shuffle
-from past.builtins import xrange
 
 def softmax_loss_naive(W, X, y, reg):
     """
@@ -32,9 +31,27 @@ def softmax_loss_naive(W, X, y, reg):
     # regularization!                                                           #
     #############################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
+    num_class = W.shape[1]
+    num_train = X.shape[0]
+    buf_e = np.zeros(num_class) #np.生成的都是array吗?
+    
+    for i in range(num_train):
+        for j in range(num_class):
+            #(1,3073)×(3073,1)=1--->10classes
+            buf_e[j] = np.dot(X[i,:],W[:,j])
+        #buf_e -= np.max(buf_e)
+        buf_e = np.exp(buf_e)
+        buf_sum = np.sum(buf_e)
+        buf = buf_e / buf_sum                                                                        
+        loss -= np.log(buf[y[i]])
+        for j in range(num_class):
+            dW[:,j] += (buf[j]-(j==y[i]))*X[i,:].T
+    #regularization with elementwise production
+    loss /= num_train
+    dW /= num_train
 
-    pass
-
+    loss += 0.5 * reg * np.sum(W * W)
+    dW += reg*W
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
     return loss, dW
