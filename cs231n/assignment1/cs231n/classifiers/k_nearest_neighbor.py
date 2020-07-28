@@ -2,7 +2,7 @@ from builtins import range
 from builtins import object
 import numpy as np
 from past.builtins import xrange
-
+import collections
 
 class KNearestNeighbor(object):
     """ a kNN classifier with L2 distance """
@@ -76,8 +76,7 @@ class KNearestNeighbor(object):
                 # not use a loop over dimension, nor use np.linalg.norm().          #
                 #####################################################################
                 # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-
-                pass
+                dists[i][j] = np.sqrt(np.sum(np.square(self.X_train[j,:]-X[i,:])))
 
                 # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         return dists
@@ -101,7 +100,7 @@ class KNearestNeighbor(object):
             #######################################################################
             # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-            pass
+            dists[i,:] = np.sqrt(np.sum(np.square(self.X_train-X[i,:]), axis=1))
 
             # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         return dists
@@ -131,7 +130,10 @@ class KNearestNeighbor(object):
         #########################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-        pass
+        dists += np.sum(self.X_train ** 2, axis=1).reshape(1, num_train) #1*5000，第一次广播
+        dists += np.sum(X ** 2, axis=1).reshape(num_test,1) #500*1，第二次广播
+        dists -= 2 * np.dot(X, self.X_train.T) #500*5000
+        dists = np.sqrt(dists)
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         return dists
@@ -164,8 +166,8 @@ class KNearestNeighbor(object):
             #########################################################################
             # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-            pass
-
+            y_labels = self.y_train[np.argsort(dists[i,:])]
+            closest_y = y_labels[:k]
             # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
             #########################################################################
             # TODO:                                                                 #
@@ -175,9 +177,10 @@ class KNearestNeighbor(object):
             # label.                                                                #
             #########################################################################
             # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-
-            pass
-
+            c = collections.Counter(closest_y)
+            y_pred[i] = c.most_common(1)[0][0]
+            
+        
             # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
         return y_pred
