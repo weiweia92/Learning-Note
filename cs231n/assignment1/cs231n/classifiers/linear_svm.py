@@ -1,7 +1,6 @@
 from builtins import range
 import numpy as np
 from random import shuffle
-from past.builtins import xrange
 
 def svm_loss_naive(W, X, y, reg):
     """
@@ -51,7 +50,7 @@ def svm_loss_naive(W, X, y, reg):
     loss /= num_train
     dW /= num_train
     # Add regularization to the loss.
-    loss += reg * np.sum(W * W)
+    loss += reg * np.sum(W * W) #reg means lambda, the weight of L2 regulation
     dW += reg*W
     #############################################################################
     # TODO:                                                                     #
@@ -87,7 +86,16 @@ def svm_loss_vectorized(W, X, y, reg):
     #############################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-    pass
+    scores = X.dot(W) # N by C (500,10)
+    num_train = X.shape[0]
+    num_classes = W.shape[1]
+    scores_correct = scores[np.arange(num_train), y].reshape(-1, 1)
+    margin = scores - scores_correct + 1
+    margin[range(num_train), y] = 0
+    margin = (margin > 0) * margin
+    loss += margin.sum() / num_train
+    loss += 0.5 * reg * np.sum(W * W)
+
 
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
@@ -101,8 +109,10 @@ def svm_loss_vectorized(W, X, y, reg):
     # loss.                                                                     #
     #############################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-
-    pass
+    counts = (margin > 0).astype(int)
+    counts[range(num_train), y] = -np.sum(counts, axis = 1)
+    dW += np.dot(X.T, counts) / num_train + reg * W
+    
 
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 

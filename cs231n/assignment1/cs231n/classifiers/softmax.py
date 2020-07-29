@@ -36,22 +36,15 @@ def softmax_loss_naive(W, X, y, reg):
     buf_e = np.zeros(num_class) #np.生成的都是array吗?
     
     for i in range(num_train):
+        f = np.dot(X[i], W)
+        f -= np.max(f) #?
+        loss += np.log(np.sum(np.exp(f))) - f[y[i]]
+        dW[:, y[i]] -= X[i]
         for j in range(num_class):
-            #(1,3073)×(3073,1)=1--->10classes
-            buf_e[j] = np.dot(X[i,:],W[:,j])
-        #buf_e -= np.max(buf_e)
-        buf_e = np.exp(buf_e)
-        buf_sum = np.sum(buf_e)
-        buf = buf_e / buf_sum                                                                        
-        loss -= np.log(buf[y[i]])
-        for j in range(num_class):
-            dW[:,j] += (buf[j]-(j==y[i]))*X[i,:].T
-    #regularization with elementwise production
-    loss /= num_train
-    dW /= num_train
-
-    loss += 0.5 * reg * np.sum(W * W)
-    dW += reg*W
+            dW[:, j] += np.exp(f[j]) / np.sum(np.exp(f)) * X[i]
+    loss = loss / num_train + 0.5 * reg * np.sum(W * W)
+    dW = dW / num_train + reg * W
+        
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
     return loss, dW
@@ -75,7 +68,20 @@ def softmax_loss_vectorized(W, X, y, reg):
     #############################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-    pass
+    num_train = X.shape[0]
+    f = np.dot(X, W) # f.shape = N, C
+    f -= f.max(axis=1).reshape(num_train,1) #axis=1--->compare each element of row
+    s = np.exp(f).sum(axis=1)
+    # (np.log(s)-f[range(num_train),y]).sum()
+    loss += np.log(s).sum() - f[range(num_train), y].sum()
+
+    counts = np.exp(f) / s.reshape(num_train, 1)
+    counts[range(num_train), y] -= 1
+    dW = np.dot(X.T, counts)
+
+    loss = loss / num_train + 0.5 * reg * np.sum(W * W)
+    dW = dW / num_train + reg * W
+    
 
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
