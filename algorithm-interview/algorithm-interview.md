@@ -112,7 +112,7 @@ ReLU和Mish的对比，Mish的梯度更平滑
 
 **常用的损失函数有哪些？分别适用于什么场景？**
 
-$$ Focal loss=-{\alpha}_t\*(1-p_t)^\gamma \log(p_t) $$  
+$Focal loss=-{\alpha}_t\*(1-p_t)^\gamma \log(p_t)$  
 交叉熵损失函数:$-\sum_{i}^{n} {y^i}\log(P_i)$
 smoothl1  
 MSE  
