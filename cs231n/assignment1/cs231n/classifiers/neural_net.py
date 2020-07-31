@@ -1,10 +1,5 @@
-from __future__ import print_function
-
-from builtins import range
-from builtins import object
 import numpy as np
 import matplotlib.pyplot as plt
-from past.builtins import xrange
 
 class TwoLayerNet(object):
     """
@@ -26,7 +21,7 @@ class TwoLayerNet(object):
         Initialize the model. Weights are initialized to small random values and
         biases are initialized to zero. Weights and biases are stored in the
         variable self.params, which is a dictionary with the following keys:
-
+        
         W1: First layer weights; has shape (D, H)
         b1: First layer biases; has shape (H,)
         W2: Second layer weights; has shape (H, C)
@@ -80,7 +75,11 @@ class TwoLayerNet(object):
         #############################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-        pass
+        S1 = X.dot(W1) + b1
+        #Relu
+        X1 = np.copy(S1)
+        X1[X1 < 0] = 0
+        score = X1.dot(W2) + b2
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
@@ -98,7 +97,14 @@ class TwoLayerNet(object):
         #############################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-        pass
+        N, D = scores.shape
+        # compute probability
+        p1 = np.exp(scores[np.arange(N), y])
+        p2 = np.sum(np.exp(scores), axis=1)
+        p = p1 / p2
+        # compute loss
+        loss = np.sum(-np.log(p) / N) + reg * (np.sum(W1 * W1) + (np.sum(W2 * W2)))
+        
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
@@ -110,9 +116,23 @@ class TwoLayerNet(object):
         # grads['W1'] should store the gradient on W1, and be a matrix of same size #
         #############################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
+        p3 = np.exp(scores) / p2.reshape(-1, 1)
+        p3[np.arange(N), y] -= 1
+        dW2 = X1.T.dot(p3) / N + 2 * reg * W2
+        db2 = np.sum(p3, axis=0) / N
+        grads["W2"] = dW2
+        grads["b2"] = db2
 
-        pass
-
+        # compute
+        dX = p3.dot(W2.T)
+        # Relu
+        dX[X1 <= 0] = 0
+        # compute first layer grad
+        dW1 = X.T.dot(dX) / N + 2 * reg * W1
+        db1 = np.sum(dX, axis=0) / N
+        grads["W1"] = dW1
+        grads["b1"] = db1
+        
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
         return loss, grads
@@ -172,8 +192,11 @@ class TwoLayerNet(object):
             #########################################################################
             # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-            pass
-
+            self.params['W1'] -= learning_rate * grads['W1']
+            self.params['b1'] -= learning_rate * grads['b1']
+            self.params['W2'] -= learning_rate * grads['W2']
+            self.params['b2'] -= learning_rate * grads['b2']
+            
             # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
             if verbose and it % 100 == 0:
@@ -218,7 +241,14 @@ class TwoLayerNet(object):
         ###########################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-        pass
+        W1, b1 = self.params['W1'], self.params['b1']
+        W2, b2 = self.params['W2'], self.params['b2']
+        S1 = X.dot(W1) + b1
+        # Relu
+        X1 = np.copy(S1)
+        X1[X1 < 0] = 0
+        scores = X1.dot(W2) + b2
+        y_pred = np.argmax(scores, axis=1)
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 

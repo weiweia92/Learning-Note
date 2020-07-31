@@ -51,7 +51,7 @@ class LinearClassifier(object):
             #########################################################################
             # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-            indices = np.random.choice(num_train, batch_size)
+            indices = np.random.choice(num_train, batch_size, replace=False)
             X_batch = X[indices]
             y_batch = y[indices]
             # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
