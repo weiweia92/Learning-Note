@@ -5,7 +5,7 @@ Anaconda->conda+环境管理器+1000+开源库
 pip是用于安装和管理软件包的包管理器。pip编写语言：Python。  
 Python中默认安装的版本：Python 2.7.9及后续版本默认安装命令为 pip,Python 3.4及后续版本默认安装命令为 pip3  
 ### pip vs conda
-1.依赖项检查
+#### 1.依赖项检查
 pip：   
 不一定会展示所需其他依赖包  
 安装包时或许会直接忽略依赖项而安装，仅在结果中提示错误。  
@@ -13,13 +13,13 @@ conda：
 列出所需其他依赖包。  
 安装包时自动安装其依赖项。  
 可以便捷地在包的不同版本中自由切换。  
-2.环境管理  
+#### 2.环境管理  
 pip：维护多个环境难度较大  
 conda：比较方便地在不同环境之间进行切换，环境管理较为简单  
-3.对系统自带Python的影响  
+#### 3.对系统自带Python的影响  
 pip：在系统自带Python中包的更新/回退版本/卸载将影响其他程序  
 conda：不会影响系统自带Python  
-4.适用语言  
+#### 4.适用语言  
 pip：仅适用于Python  
 conda：适用于Python, R, Ruby, Lua, Scala, Java, JavaScript, C/C++, FORTRAN  
 conda结合了pip和virtualenv的功能  
