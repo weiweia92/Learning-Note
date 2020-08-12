@@ -28,10 +28,10 @@ conda结合了pip和virtualenv的功能
 Package Manager：当安装一个包的时候，依赖包  
 Environment Manager：create multiple virtual environment   
 conda为Python项目而创造，但可适用于上述的多种语言。  
-conda包和环境管理器包含于Anaconda的所有版本当中。
+conda包和环境管理器包含于Anaconda的所有版本当中。  
 1.更新conda：`conda update conda`  
 2.更新anaconda：`conda update anaconda`  
-3.更新python：`conda update python`
+3.更新python：`conda update python`  
 4.查看conda版本：`conda --version`  
 #### Environment
 1.查看系统环境，用户安装的不同Python环境会放在`~/miniconda3/envs`目录下  
