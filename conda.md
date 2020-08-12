@@ -1,10 +1,10 @@
-## Anaconda  
+### Anaconda  
 Anaconda是一个包含180+的科学包及其依赖项的发行版本。其包含的科学包包括：conda, numpy, scipy, ipython notebook等  
 Anaconda->conda+环境管理器+1000+开源库  
-## pip
+### pip
 pip是用于安装和管理软件包的包管理器。pip编写语言：Python。  
 Python中默认安装的版本：Python 2.7.9及后续版本默认安装命令为 pip,Python 3.4及后续版本默认安装命令为 pip3  
-## pip vs conda
+### pip vs conda
 1.依赖项检查
 pip：   
 不一定会展示所需其他依赖包  
@@ -23,8 +23,8 @@ conda：不会影响系统自带Python
 pip：仅适用于Python  
 conda：适用于Python, R, Ruby, Lua, Scala, Java, JavaScript, C/C++, FORTRAN  
 conda结合了pip和virtualenv的功能  
-## Conda
-### Conda->Package Manager+Environment Manager
+### Conda
+#### Conda->Package Manager+Environment Manager
 Package Manager：当安装一个包的时候，依赖包  
 Environment Manager：create multiple virtual environment   
 conda为Python项目而创造，但可适用于上述的多种语言。  
@@ -48,7 +48,6 @@ conda info -e 或者 conda env list：查看当前系统中已经安装了哪些
 5.安装package到指定的环境：`conda install -n py35 numpy # 如果不用-n指定环境名称，则被安装在当前活跃环境,也可以通过-c指定通过某个channel安装`   
 6.更新package：`conda update -n <env_name> <package_name>`  
 7.删除package：`conda remove -n <env_name> <package_name>`  
-
 #### Channels
 channels:the path or the location where conda looks for the packages that we want to install.  
 1.查看当前channel:`conda config --show channels`  
