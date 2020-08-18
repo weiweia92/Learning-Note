@@ -140,6 +140,21 @@ find all files and execute 'rm...'
 `./test.sh  >& log.txt`  
 `./test.sh  &> log.txt`  
 
+### nohup
+Nohup is short for “No Hangups.” It’s not a command that you run by itself. Nohup is a supplemental(补充) command that tells the Linux system not to stop another command once it has started. That means it’ll keep running until it’s done, even if the user that started it logs out. The syntax for nohup is simple and looks something like this:
+
+`nohup mycommand`   
+
+`nohup command &`  
+eg:`nohup sh your-script.sh &`  
+Notice the “&” at the end of the command. That moves the command to the background, freeing up the terminal that you’re working in.  
+`nohup ./some-script.sh > ~/Documents/custom.out &`: nohup logs everything to an output file, nohup.out.  
+
+When using &, you'll see the bash job ID in brackets, and the process ID (PID) listed after. For example:
+[1] 25132  
+You can use the PID to terminate the process prematurely. For instance, to send it the TERM (terminate) signal with the kill command:  
+`kill -9 25132`  
+
 
 
 
