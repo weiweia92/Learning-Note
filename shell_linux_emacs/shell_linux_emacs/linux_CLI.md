@@ -147,14 +147,18 @@ Nohup is short for “No Hangups.” It’s not a command that you run by itself
 
 `nohup command &`  
 eg:`nohup sh your-script.sh &`  
-Notice the “&” at the end of the command. That moves the command to the background, freeing up the terminal that you’re working in.  
+
+Notice the "&" at the end of the command. That moves the command to the background, freeing up the terminal that you’re working in.  
 `nohup ./some-script.sh > ~/Documents/custom.out &`: nohup logs everything to an output file, nohup.out.  
 
 When using &, you'll see the bash job ID in brackets, and the process ID (PID) listed after. For example:
 [1] 25132  
+
 You can use the PID to terminate the process prematurely. For instance, to send it the TERM (terminate) signal with the kill command:  
+
 `kill -9 25132`  
 
-
+### ln -s:create symbolic link  
+cd 到你想要建立软连接的目录，直接 ln -s 原文件的路径，创建软链接；假如要改名字的话， ln -s 原文件路径 软链接名字
 
 
